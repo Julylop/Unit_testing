@@ -91,41 +91,57 @@ Con **Visual Studio Code**, siguiendo la guia de **Microsoft**, debemos seguir l
 
 > Normalmente no se mezclan los proyectos de prueba con los proyectos de negocio.
 
-1. Vamos a crear un nuevo proyecto dentro de la misma solución ➡️
-    * Por **buenas prácticas**, el estandar recomienda que el nombre del proyectos de pruebas incluya el nombre del proyecto a probar: `StringManipulation.Tests`
+    1.Vamos a crear un nuevo proyecto dentro de la misma solución que sea de tipo xUnit (c#) y que, por buenas prácticas, el estándar recomienda que el nombre del proyecto de pruebas         incluya el nombre del proyecto a probar en este caso: StringManipulation.Tests
 
-2. Crear archivo de pruebas (una clase) para el proyecto ➡️ 
-    * Por **buenas prácticas** se recomienda que la clase de pruebas lleve el mismo nombre incluya el mismo nombre de la clase que se va a probar: `StringOperations.Test`
+    2.Eliminamos la clase que viene por defecto porque no le vamos a dar ningún uso
+    
+    3.Crear archivo de pruebas (una clase) para el proyecto que por buenas prácticas se recomienda que la clase de pruebas lleve el mismo nombre de la clase que se va a probar en este        caso: StringOperations.Test
+    
+    4.Luego vamos a eliminar los using que están por defecto en la clase y agregamos using Xunit y también ponemos public la clase 
+    
+    5.Agregar la referencia del proyecto que tiene la clase del proyecto que se va a probar, damos clic derecho en Dependencias, agregar referencia o seleccionamos el nombre del             proyecto, clic en aceptar
 
-3. Agregar la referencia del proyecto que tiene la clase del proyecto que se va a probar ➡️
-    * Clic derecho en Dependencias, Agregar referencia
-    * Seleccionamos el nombre del proyecto, clic en aceptar
 
-### Crear una prueba
+CREAR UNA PRUEBA
+> una vez referenciado el proyecto, creamos una prueba asociada a la funcionalidad que deseamos probar, en este caso, Comenzaremos con el primer método de la clase StringOperation. Siempre las clases de pruebas deben ser públicas.
 
-una vez referenciado el proyecto, creamos una prueba asociada a la funcionalidad que deseamos probar, en este caso, Comenzaremos con el primer método de la clase `StringOperation`.
+    1.Para crear un método que sea un caso de prueba, debemos agregar la etiqueta [Fact]. Una vez hecho, definimos un método público tipo void con el mismo nombre de la funcionalidad a        probar, en este primer caso de prueba se llamara ReturnsConcatenateStrings().
+    
+    2.Al momento de escribir pruebas unitarias existe un patrón en comentarios que se debe crear dentro del método para que el test se entienda, de la siguiente manera: 
+//Arrange, aquí se definen las variables que vamos a necesitar y a su vez vamos a usar a la hora de probar nuestra clase
+En este primer caso serán:
+var string_operations = new StringOperations();
+string str1 = "Bienvenido,";
+string str2 = "Gracias por confiar en nuestro servicio";
+string resultado_esperado = "Bienvenido, Gracias por confiar en nuestro servicio";
 
-> Siempre las clases de pruebas deben ser públicas.
+    3. Continuamos agregando el patrón
+//Act, aquí vamos a escribir lo que esperamos que pase del método
+En este primer caso sería:
+string result = string_operations.ConcatenateStrings(str1, str2);
 
-1. Para que un método sea un caso de prueba, debemos agregar la etiqueta `[Fact]`. Una vez hecho, definimos un método público tipo `void` con el mismo nombre de la funcionalidad a probar.
-    * <kbd>Nota:</kbd> Debemos agregar el `using Xunit;` para acceder a sus diferentes funcionalidades
-2. Para este caso, crearemos un objeto del tipo de la clase base que estamos probando.
-3. Implementamos una variable en donde vamos a guardar el resultado del método a probar.
-4. Utilizamos la clase `Assert` y su método `Equal`, aqui probaremos lo que esperamos recibir, respecto a lo que estamos recibiendo.
-5. En Visual Studio tenemos la funcionalidad del *Test Explorer*, para hacer la ejecución de las pruebas
+    4.Por último utilizamos la clase assert, que tiene una serie de métodos estáticos que validan determinadas cosas, por ejemplo, en este caso usaremos el método Equal que verifica que       dos objetos sean iguales utilizando el comparador por defecto 
+//Assert
+Assert.Equal(resultado_esperado, result);
 
-## Estructura AAA
+    5.Procedemos a compilar el proyecto
+    
+    6.En Visual Studio tenemos la funcionalidad del Test Explorer, para hacer la ejecución de las pruebas, después de haber compilado ya la prueba aparece en el Test Explorer
+    
+    7. En la parte superior del Test Explorer, tenemos unos mandos con los que podremos ejecutar las pruebas que tengamos en el proyecto, También habrá unos indicadores que nos                informaran cuantas pruebas pasaron, cuantas no pasaron y cuantas no se ejecutaron 
+    
+    8. Luego procedemos a dar en el mando Run, para ejecutar la prueba y si aparecen en chulos verdes significa que la prueba ha pasado correctamente. Si por el contrario la prueba no        pasa correctamente aparecen unas x en rojo que informaran en el parte del método la prueba muestra el error 
+
+ESTRUCTURA AAA
 
 La estructura AAA se refiere a un enfoque comúnmente utilizado en el desarrollo de pruebas unitarias, y se compone de tres fases principales: Arrange, Act y Assert. Estas tres fases describen la secuencia lógica que se sigue al escribir una prueba unitaria. A continuación, se detallan cada una de las fases de la estructura AAA:
 
-**1. Arrange (Preparar):**
-En esta fase, se prepara el escenario para la prueba. Esto implica configurar el estado inicial necesario para ejecutar la prueba. Se crean instancias de objetos, se establecen valores iniciales y se configuran condiciones previas para la prueba.
+1. Arrange (Preparar): En esta fase, se prepara el escenario para la prueba. Esto implica configurar el estado inicial necesario para ejecutar la prueba. Se crean instancias de objetos, se establecen valores iniciales y se configuran condiciones previas para la prueba.
+   
+2. Act (Actuar): En esta fase, se realiza la acción o se invoca el método que se está probando. Es el paso donde se ejecuta la operación que se quiere verificar. Se trata de la acción específica que estás probando en la unidad de código.
+   
+3. Assert (Verificar): En esta fase, se verifica el resultado de la acción realizada en la fase "Act". Se comprueba si el resultado es el esperado según las condiciones definidas en la fase "Arrange". Si el resultado coincide con las expectativas, la prueba se considera exitosa; de lo contrario, se considera fallida.
 
-**1. Act (Actuar):**
-En esta fase, se realiza la acción o se invoca el método que se está probando. Es el paso donde se ejecuta la operación que se quiere verificar. Se trata de la acción específica que estás probando en la unidad de código.
-
-**1. Assert (Verificar):**
-En esta fase, se verifica el resultado de la acción realizada en la fase "Act". Se comprueba si el resultado es el esperado según las condiciones definidas en la fase "Arrange". Si el resultado coincide con las expectativas, la prueba se considera exitosa; de lo contrario, se considera fallida.
 
 ### Ejemplo
 
